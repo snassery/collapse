@@ -61,7 +61,7 @@ function block_date_timezone_user($op, &$edit, &$account, $category = NULL) {
   }
   return $timezone;
 }
-
+}
 
 /** implement login */
 

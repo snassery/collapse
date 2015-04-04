@@ -1,0 +1,13 @@
+name = Collapse
+description = An example outlining how a module can define blocks and collapse.
+package = Example modules
+core = 7.x
+dependencies[] = block
+files[] = collapse.test
+
+; Information added by Drupal.org packaging script on 2015-03-11
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "examples"
+datestamp = "1426097283"
+

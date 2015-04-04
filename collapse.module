@@ -1,0 +1,53 @@
+<?php
+// we use MODULENAME_form_FORMID_alter to restrict it to the specific form
+// this helps reduce processing time, as Drupal will ignore this on any other forms
+function collapse_form_user_profile_form_alter(&$form, &$form_state, $form_id)
+{
+    // can't hurt to double-check that we're on the right form
+    if ($form_id == "user_profile_form")
+    {
+         // Note that the ID of the fieldset is "picture" not "edit-picture" like
+         // the fieldset's HTML ID - you may have to guess-and-check to find it.
+         // Usueally you remove the "edit-" part of the HTML ID, and replace any
+         // spaces with underscores, i.e. "edit-signature-settings"
+         // becomes "signature_sttings"
+         // Only these two lines are needed if the fieldset you are trying 
+         // to collapse is not collapsible by default, such as the user picture.
+         $form['picture']['#collapsible'] = true;
+         $form['picture']['#collapsed'] = true;
+
+         // A third line is needed if the fieldset you are trying to collapse
+         // is collapsible, but is uncollapsed by default - for example, the timezone.
+         // Note that depending on the fieldset, this third line MAY OR MAY NOT
+         // be needed! Start without it, and if the fieldset isn't collapsing,
+         // add the third line to force the addition of the 'collapsed' class.
+         $form['timezone']['#collapsible'] = true;
+         $form['timezone']['#collapsed'] = true;
+         $form['timezone']['#attributes']['class'][] = 'collapsed';
+
+         // Implement an "after_build" to put these changes into the form.
+         // The array is just which function you are telling it to run.
+        $form['#after_build'] = array('collapse_fieldsets');
+
+         // Test to make sure module and hook_form_alter is working 
+         // and the page hasn't been cached - very easy to check if the 
+         // main form's class has been updated each time you refresh.
+         // Just change the version number each time you upload this .module file.
+        $form['#attributes']['class'][] = 'version-5';
+    }
+}
+
+// this function renders the form content
+function collapse_fieldsets($form_element, &$form_state) 
+{
+        // Note that this is the same as above, but with $form_element instead of $form.
+        // Everything you put in the above code must be duplicated here.
+        $form_element['picture']['#collapsible'] = true;
+        $form_element['picture']['#collapsed'] = true;
+
+        $form_element['timezone']['#collapsible'] = true;
+        $form_element['timezone']['#collapsed'] = true;
+        $form_element['timezone']['#attributes']['class'][] = 'collapsed';
+
+        return $form_element;
+}

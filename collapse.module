@@ -37,31 +37,6 @@ function collapse_form_user_profile_form_alter(&$form, &$form_state, $form_id)
     }
 }
 
-/** implement timezone */
-function block_date_timezone_user($op, &$edit, &$account, $category = NULL) {
-  if (isset($account->uid) && $op == 'login' && variable_get('configurable_timezones', 1)) {
-    if (strlen($account->timezone_name)) {
-      $date = date_now($account->timezone_name);
-      $offset = date_offset_get($date);
-      if ($offset != $account->timezone) {
-        $account->timezone = $offset;
-        db_query("UPDATE {users} SET timezone='%s' WHERE uid = %d", $offset, $account->uid);
-      }
-    }
-    else {
-      // If the user doesn't already have a timezone name selected,
-      // default it to the site timezone name and offset.
-      $timezone = variable_get('date_default_timezone_name', NULL);
-      if (!empty($timezone)) {
-        $date = date_now($timezone);
-        $offset = date_offset_get($date);
-        db_query("UPDATE {users} SET timezone_name = '%s', timezone='%s' WHERE uid = %d", $timezone, $offset, $account->uid);
-      }
-    }
-  }
-  return $timezone;
-}
-}
 
 /** implement login */
 
